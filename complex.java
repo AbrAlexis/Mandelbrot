@@ -45,5 +45,5 @@ public class Complex {
         else{
         return ""+this.re+" + "+this.im+"i";
         }
-    }
+}
 }
