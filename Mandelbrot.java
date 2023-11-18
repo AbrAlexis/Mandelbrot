@@ -19,11 +19,11 @@ public class Mandelbrot {
     }
 
     public static void getGrid(){ 
-        
-        double centerX = numberValidation("Enter value for centrum X-coordinate");
-        double centerY = numberValidation("Enter value for centrum Y-coordinate");
-        double sideLength = numberValidation("Enter sidelength of coordinate system");
+        double centerX = numberValidation("Enter value for centrum X-coordinate: ");
+        double centerY = numberValidation("Enter value for centrum Y-coordinate: ");
+        double sideLength = numberValidation("Enter sidelength of coordinate system: ");
     }
+
     private static Double numberValidation( String b) { //Private helping function that handles userErrors.
         double a = 0.0;
         String userInputNumber;
@@ -43,3 +43,4 @@ public class Mandelbrot {
         return a;
     }
 }
+
