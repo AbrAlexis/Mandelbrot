@@ -18,10 +18,28 @@ public class Mandelbrot {
         return MAX;
     }
 
-    public static void getGrid(){ 
+    public static Complex[][] getGrid(){ 
         double centerX = numberValidation("Enter value for centrum X-coordinate: ");
         double centerY = numberValidation("Enter value for centrum Y-coordinate: ");
         double sideLength = numberValidation("Enter sidelength of coordinate system: ");
+        Complex gridArray[][] = new Complex[gridSize][gridSize];
+        Complex griddy;
+        double griddyRe;
+        double griddyIm;
+        int counter = 0;
+        for (int j = 0; j < gridSize; j++) {
+            for (int k = 0; k < gridSize; k++) {
+                counter++;
+                griddyRe = (centerX - (sideLength / 2) + ((sideLength * j) / (gridSize - 1)));
+                griddyIm = (centerY - (sideLength / 2) + ((sideLength * k) / (gridSize - 1)));
+                griddy = new Complex(griddyRe, griddyIm);
+
+                gridArray[j][k] = griddy;
+                System.out.println(counter +" "+ gridArray[j][k]);
+            }
+            System.out.print("");
+        }
+       return gridArray;
     }
 
     private static Double numberValidation( String b) { //Private helping function that handles userErrors.
@@ -42,5 +60,7 @@ public class Mandelbrot {
         }
         return a;
     }
+
+
 }
 

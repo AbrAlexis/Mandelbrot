@@ -39,6 +39,11 @@ public class Complex {
     }
 
     public String toString() {
+        if (this.im < 0) {
+            return ""+this.re +" "+this.im+"i";
+        }
+        else{
         return ""+this.re+" + "+this.im+"i";
+        }
     }
 }
