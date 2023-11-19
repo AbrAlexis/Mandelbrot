@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Mandelbrot {
@@ -5,7 +7,7 @@ public class Mandelbrot {
     private static final int MAX = 255;
     private static final int gridSize = 512;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Complex[][] gridArray = getGrid();
         showRandomColors(gridArray);
         // showNoColors(gridArray);
@@ -81,18 +83,39 @@ public class Mandelbrot {
         StdDraw.show(0);
     }
 
-    public static void showRandomColors(Complex[][] a) {
+    public static void showRandomColors(Complex[][] a) throws FileNotFoundException {
         double pointRadius = 512 / a.length * 0.5;
         double pointDiameter = 512 / a.length;
         int iterateValue;
         StdDraw.setXscale(0, 512);
         StdDraw.setYscale(0, 512);
         StdDraw.show(0);
-        System.out.println("Type 1 for random colors or type 2 to read colors from file: ");
+        int[][] colors = null;
+        colors = getUserColors();
+        for (int j = 0; j < gridSize; j++) {
+            for (int k = 0; k < gridSize; k++) {
+                iterateValue = iterate(a[j][k]);
+                if (iterateValue == MAX) {
+                    // StdDraw.setPenColor(StdDraw.BLUE);
+                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
+                            pointRadius);
+                } else {
+                    StdDraw.setPenColor(colors[iterateValue][0], colors[iterateValue][1],
+                            colors[iterateValue][2]);
+                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
+                            pointRadius);
+                }
+            }
+        }
+        StdDraw.show(0);
+    }
+
+    private static int[][] getUserColors() throws FileNotFoundException {
+        Scanner console = new Scanner(System.in);
         String userInputNumber;
         int randOrFile;
-        Scanner console = new Scanner(System.in);
-        int[][] colors = null;
+
+        System.out.println("Type 1 for random colors or type 2 to read colors from file: ");
         while (true) {
             userInputNumber = console.nextLine();
             try {
@@ -107,27 +130,10 @@ public class Mandelbrot {
             }
         }
         if (randOrFile == 1) {
-            colors = randomRGBGenerator();
+            return randomRGBGenerator();
         } else {
-            System.out.println("ahahahha");
+            return fileToArray();
         }
-
-        for (int j = 0; j < gridSize; j++) {
-            for (int k = 0; k < gridSize; k++) {
-                iterateValue = iterate(a[j][k]);
-                if (iterateValue == MAX) {
-                    StdDraw.setPenColor(StdDraw.BLUE);
-                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
-                            pointRadius);
-                } else {
-                    StdDraw.setPenColor(colors[iterateValue][0], colors[iterateValue][1],
-                            colors[iterateValue][2]);
-                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
-                            pointRadius);
-                }
-            }
-        }
-        StdDraw.show(0);
     }
 
     private static int[][] randomRGBGenerator() {
@@ -141,4 +147,18 @@ public class Mandelbrot {
         return colors;
     }
 
+    private static int[][] fileToArray() throws FileNotFoundException {
+        String fileLocation;
+        System.out.println("Enter file name: ");
+        Scanner fileLocationReturner = new Scanner(System.in);
+        fileLocation = fileLocationReturner.nextLine();
+        int[][] colorsInFile = new int[256][3];
+        Scanner newScanner = new Scanner(new File(fileLocation));
+        for (int row = 0; row < 256; row++) {
+            for (int column = 0; column < 3; column++) {
+                colorsInFile[row][column] = newScanner.nextInt();
+            }
+        }
+        return colorsInFile;
+    }
 }
