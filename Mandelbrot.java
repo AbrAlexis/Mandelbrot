@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Mandelbrot {
     private static final int MAX = 255;
-    private static final int GRID_SIZE = 500;
+    private static final int GRID_SIZE = 800;
 
     public static void main(String[] args) throws FileNotFoundException {
         Complex[][] gridArray = getGrid();
@@ -83,7 +83,6 @@ public class Mandelbrot {
         StdDraw.setXscale(0, GRID_SIZE);
         StdDraw.setYscale(0, GRID_SIZE);
         StdDraw.show(0);
-        StdDraw.clear();
         int[][] colors = null;
         colors = getUserColors();
         for (int j = 0; j < GRID_SIZE; j++) {
