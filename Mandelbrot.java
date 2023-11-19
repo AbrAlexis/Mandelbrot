@@ -2,12 +2,14 @@ import java.util.*;
 
 public class Mandelbrot {
 
-    private static final int MAX = 20;
-    private static final int gridSize = 5;
+    private static final int MAX = 255;
+    private static final int gridSize = 512;
 
     public static void main(String[] args) {
         Complex[][] gridArray = getGrid();
-        show(gridArray);
+        showRandomColors(gridArray);
+        // showNoColors(gridArray);
+
     }
 
     public static int iterate(Complex z0) {
@@ -25,21 +27,19 @@ public class Mandelbrot {
         double centerX = numberValidation("Enter value for centrum X-coordinate: ");
         double centerY = numberValidation("Enter value for centrum Y-coordinate: ");
         double sideLength = numberValidation("Enter sidelength of coordinate system: ");
+
         Complex gridArray[][] = new Complex[gridSize][gridSize];
         Complex griddy;
         double griddyRe;
         double griddyIm;
-        int counter = 0;
+
         for (int j = 0; j < gridSize; j++) {
             for (int k = 0; k < gridSize; k++) {
-                counter++;
                 griddyRe = (centerX - (sideLength / 2) + ((sideLength * j) / (gridSize - 1)));
                 griddyIm = (centerY - (sideLength / 2) + ((sideLength * k) / (gridSize - 1)));
                 griddy = new Complex(griddyRe, griddyIm);
                 gridArray[j][k] = griddy;
-                System.out.println(counter + " " + gridArray[j][k]);
             }
-            System.out.print("");
         }
         return gridArray;
     }
@@ -49,7 +49,6 @@ public class Mandelbrot {
         String userInputNumber;
         Scanner console = new Scanner(System.in);
         System.out.println(b);
-
         while (true) {
             userInputNumber = console.nextLine();
             try {
@@ -62,14 +61,84 @@ public class Mandelbrot {
         return a;
     }
 
-    public static void show(Complex[][] a) {
+    public static void showNoColors(Complex[][] a) {
+        double pointRadius = 512 / a.length * 0.5;
+        double pointDiameter = 512 / a.length;
+        double iterateValue;
+        StdDraw.setXscale(0, 512);
+        StdDraw.setYscale(0, 512);
+        StdDraw.show(0);
+        for (int j = 0; j < gridSize; j++) {
+            for (int k = 0; k < gridSize; k++) {
+                iterateValue = iterate(a[j][k]);
+                if (iterateValue == MAX) {
+                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
+                            pointRadius);
+                }
+
+            }
+        }
+        StdDraw.show(0);
+    }
+
+    public static void showRandomColors(Complex[][] a) {
+        double pointRadius = 512 / a.length * 0.5;
+        double pointDiameter = 512 / a.length;
+        int iterateValue;
+        StdDraw.setXscale(0, 512);
+        StdDraw.setYscale(0, 512);
+        StdDraw.show(0);
+        System.out.println("Type 1 for random colors or type 2 to read colors from file: ");
+        String userInputNumber;
+        int randOrFile;
+        Scanner console = new Scanner(System.in);
+        int[][] colors = null;
+        while (true) {
+            userInputNumber = console.nextLine();
+            try {
+                randOrFile = Integer.valueOf(userInputNumber);
+                if (randOrFile != 1 && randOrFile != 2) {
+                    System.out.println("Please enter either 1 or 2:  ");
+                    continue;
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Please enter either 1 or 2: ");
+            }
+        }
+        if (randOrFile == 1) {
+            colors = randomRGBGenerator();
+        } else {
+            System.out.println("ahahahha");
+        }
 
         for (int j = 0; j < gridSize; j++) {
             for (int k = 0; k < gridSize; k++) {
-                if (iterate(a[j][k]) == MAX) {
-
+                iterateValue = iterate(a[j][k]);
+                if (iterateValue == MAX) {
+                    StdDraw.setPenColor(StdDraw.BLUE);
+                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
+                            pointRadius);
+                } else {
+                    StdDraw.setPenColor(colors[iterateValue][0], colors[iterateValue][1],
+                            colors[iterateValue][2]);
+                    StdDraw.filledCircle(j * pointDiameter + pointRadius, (k * pointDiameter + pointRadius),
+                            pointRadius);
                 }
             }
         }
+        StdDraw.show(0);
     }
+
+    private static int[][] randomRGBGenerator() {
+        Random random = new Random();
+        int[][] colors = new int[256][3];
+        for (int i = 0; i < 256; i++) {
+            for (int j = 0; j < 3; j++) {
+                colors[i][j] = random.nextInt(256);
+            }
+        }
+        return colors;
+    }
+
 }
