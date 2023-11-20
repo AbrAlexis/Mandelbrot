@@ -124,13 +124,13 @@ public class Mandelbrot {
             }
         }
         if (randOrFile == 1) {
-            return randomRGBGenerator();
+            return randomRgbGenerator();
         } else {
             return fileToArray();
         }
     }
 
-    private static int[][] randomRGBGenerator() {
+    private static int[][] randomRgbGenerator() {
         Random random = new Random();
         int[][] colors = new int[256][3];
         for (int i = 0; i < 256; i++) {
@@ -152,15 +152,23 @@ public class Mandelbrot {
             try {
                 newScanner = new Scanner(new File(fileLocation));
                 break;
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 System.out.println("Cannot find file. Try again: ");
             }
         }
-        for (int row = 0; row < 256; row++) {
-            for (int column = 0; column < 3; column++) {
-                colorsInFile[row][column] = newScanner.nextInt();
+        while (true) {
+
+            try {
+                for (int row = 0; row < 256; row++) {
+                    for (int column = 0; column < 3; column++) {
+                        colorsInFile[row][column] = newScanner.nextInt();
+                    }
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Something went wrong trying to read the file. Check if it is formatted correctly");
             }
+            return colorsInFile;
         }
-        return colorsInFile;
+
     }
 }
