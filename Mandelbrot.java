@@ -151,24 +151,18 @@ public class Mandelbrot {
             fileLocation = fileLocationReturner.nextLine();
             try {
                 newScanner = new Scanner(new File(fileLocation));
-                break;
-            } catch (FileNotFoundException e) {
-                System.out.println("Cannot find file. Try again: ");
-            }
-        }
-        while (true) {
-
-            try {
                 for (int row = 0; row < 256; row++) {
                     for (int column = 0; column < 3; column++) {
                         colorsInFile[row][column] = newScanner.nextInt();
                     }
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Something went wrong trying to read the file. Check if it is formatted correctly");
+                break;
+            } catch (FileNotFoundException | InputMismatchException e) {
+                System.out.println(
+                        "Something went wrong trying to read or find the file. Check if it exist and is formatted correctly, and try again: ");
             }
-            return colorsInFile;
         }
 
+        return colorsInFile;
     }
 }
